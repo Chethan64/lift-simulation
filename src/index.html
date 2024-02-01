@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lift Simulation</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+</head>
+
+<body>
+    <div id="input-div">
+        <div id="input-container">
+            <label for="num-lifts">Number of lifts: </label>
+            <input type="number" id="num-lifts" min="1" value="1"> 
+            <label for="num-floors">Number of floors: </label>
+            <input type="number" id="num-floors" min="2" value="2">
+        </div>
+        <div id="start-button">
+            <button id="start-simulation">Simulate</button>
+        </div>
+    </div>  
+
+    <div class="floors">
+        <div class="floor" style="border-bottom: 1px solid gray">
+            <div class="lift-buttons">
+                <button class="call-lift-btn call-lift-up-btn" data-lift-num="0">
+                    >
+                </button>
+                <button class="call-lift-btn call-lift-down-btn" data-lift-num="0">
+                    >
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
