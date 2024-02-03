@@ -68,35 +68,6 @@ function getLifts() {
     return lifts;
 }
 
-function getLiftElement() {
-    const liftDistance = (lifts.length + 1) * 120;
-
-    const liftElement = document.createElement("div");
-    liftElement.classList.add("lift-container");
-    liftElement.style.position = "absolute";
-    liftElement.style.left = `${liftDistance}px`;
-
-    liftElement.innerHTML += `
-            <div class="left-door">                        
-            </div>
-            <div class="right-door">
-            </div>
-    `;
-
-    return liftElement;
-}
-
-function addLift() {
-    floors = document.querySelectorAll(".floor");
-    floors[floors.length - 1].append(getLiftElement());
-    var liftElements = document.querySelectorAll('.lift-container');
-    lifts.push({
-        htmlElement: liftElements[liftElements.length - 1],
-        busy: false,
-        currentFloor: 0,
-    });
-}
-
 function getClosestEmptyLift(destFloor) {
     const lifts = getLifts();
 
@@ -168,6 +139,35 @@ function callLift() {
         lifts[index].busy = true;
         moveLift(lift.htmlElement, requests.remove(), index);
     }
+}
+
+function getLiftElement() {
+    const liftDistance = (lifts.length + 1) * 120;
+
+    const liftElement = document.createElement("div");
+    liftElement.classList.add("lift-container");
+    liftElement.style.position = "absolute";
+    liftElement.style.left = `${liftDistance}px`;
+
+    liftElement.innerHTML += `
+            <div class="left-door">                        
+            </div>
+            <div class="right-door">
+            </div>
+    `;
+
+    return liftElement;
+}
+
+function addLift() {
+    floors = document.querySelectorAll(".floor");
+    floors[floors.length - 1].append(getLiftElement());
+    var liftElements = document.querySelectorAll('.lift-container');
+    lifts.push({
+        htmlElement: liftElements[liftElements.length - 1],
+        busy: false,
+        currentFloor: 0,
+    });
 }
 
 function getFloorElement(floorNumber) {

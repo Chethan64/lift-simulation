@@ -22,9 +22,9 @@
 
 #start-simulation {
     font-family: 'Poppins';
-    background: #35b463;
+    background: #369063;
     border-radius: 999px;
-    box-shadow: #35b463 0 10px 20px -10px;
+    box-shadow: #369063 0 10px 20px -10px;
     box-sizing: border-box;
     color: #FFFFFF;
     cursor: pointer;
@@ -121,8 +121,8 @@
 }
 
 .lift-buttons .call-lift-down-btn {
-    background-color: #35b463;
-    border: 1px solid #35b463;
+    background-color: #369063;
+    border: 1px solid #369063;
     transform: rotate(90deg);
     text-shadow: black;
     font-weight: bold;
