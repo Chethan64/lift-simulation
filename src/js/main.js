@@ -201,11 +201,25 @@ function addCallEventListeners(buttons) {
     }
 }
 
+function removeFirstLastFloorButtons() {
+    var floors = document.querySelectorAll('.floor');
+    for(var floorNum = 0; floorNum < numFloors; ++floorNum) {
+        var floor = floors[floorNum];
+        if(floor.childNodes[1].childNodes[1].dataset.liftNum == (numFloors - 1))
+            floor.childNodes[1].childNodes[1].style.display = 'none'
+        else if(floor.childNodes[1].childNodes[3].dataset.liftNum == 0)
+            floor.childNodes[1].childNodes[3].style.display = 'none';
+    }
+}
+
 function takeInputAndStartSimulation() {
     const numLifts = parseInt(document.getElementById('num-lifts').value);
     numFloors = parseInt(document.getElementById('num-floors').value);
 
-    document.getElementById('input-container').style.display = 'none';
+    document.getElementById('start-button').style.display = 'none';
+    document.getElementById('num-lifts').setAttribute('disabled', 'disabled');
+    document.getElementById('num-floors').setAttribute('disabled', 'disabled');
+
     for(var floor = 1; floor < numFloors; ++floor) {
         floorsContainer.prepend(getFloorElement(floor));
     }
@@ -214,6 +228,7 @@ function takeInputAndStartSimulation() {
         addLift();
     }
 
+    removeFirstLastFloorButtons();
     callButtons = document.querySelectorAll(".call-lift-btn");
     addCallEventListeners(callButtons);
 }

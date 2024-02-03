@@ -2,6 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lift Simulation</title>
     <link rel="stylesheet" href="./css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
@@ -11,9 +12,9 @@
     <div id="input-div">
         <div id="input-container">
             <label for="num-lifts">Number of lifts: </label>
-            <input type="number" id="num-lifts" min="1" value="1"> 
+            <input type="number" id="num-lifts" min="1" value="1" max="10"> 
             <label for="num-floors">Number of floors: </label>
-            <input type="number" id="num-floors" min="2" value="2">
+            <input type="number" id="num-floors" min="2" value="2" max="10">
         </div>
         <div id="start-button">
             <button id="start-simulation">Simulate</button>
