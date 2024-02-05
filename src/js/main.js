@@ -216,6 +216,24 @@ function takeInputAndStartSimulation() {
     const numLifts = parseInt(document.getElementById('num-lifts').value);
     numFloors = parseInt(document.getElementById('num-floors').value);
 
+    const screenWidth = document.getElementsByTagName("body")[0].clientWidth;
+    const maxLifts = Math.floor((screenWidth - 100) / 120);
+
+    if(numLifts > maxLifts) {
+        alert('Number of lifts exceeds the lifts that can be rendered in the current screen size');
+        return;
+    }
+
+    if(numLifts > numFloors) {
+        alert('Number of lifts cannot be greater than the number of floors');
+        return;
+    }
+
+    if(numFloors > 10) {
+        alert('Number of floors cannot be greater than 10');
+        return;
+    }
+
     document.getElementById('start-button').style.display = 'none';
     document.getElementById('num-lifts').setAttribute('disabled', 'disabled');
     document.getElementById('num-floors').setAttribute('disabled', 'disabled');
