@@ -76,6 +76,12 @@ function getClosestEmptyLift(destFloor) {
     var closestLift = {};
 
     for(var i = 0; i < lifts.length; ++i) {
+        if(lifts[i].currentFloor == destFloor) {
+            return { lift: lifts[i], index: i };
+        }
+    }
+
+    for(var i = 0; i < lifts.length; ++i) {
         if(!lifts[i].busy) {
             var distance = Math.abs(destFloor - lifts[i].currentFloor);
             if(distance < closeLiftDistance) {
