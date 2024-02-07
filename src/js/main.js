@@ -1,6 +1,7 @@
 class Queue {
     constructor() {
         this.requests = [];
+        this.processingRequests = [];
     }
 
     add(request) {
@@ -9,7 +10,9 @@ class Queue {
 
     remove() {
         if(this.requests.length > 0) {
-            return this.requests.shift();
+            const removedElement = this.requests.shift();
+            this.processingRequests.push(removedElement);
+            return removedElement;
         }
     }
 
@@ -25,6 +28,21 @@ class Queue {
 
     size() {
         return this.requests.length;
+    }
+
+    removeProcessing(element) {
+        if(this.processingRequests.length > 0) {
+            const index = this.processingRequests.findIndex((ele) => element == ele);
+            if(index != -1) {
+                this.processingRequests.splice(index, 1);
+            }
+        }
+    }
+
+    find(element) {
+        if(this.requests.findIndex((ele) => ele == element) != -1 || this.processingRequests.findIndex((ele) => ele == element) != -1)
+            return true;
+        return false;
     }
 }
 
@@ -105,7 +123,7 @@ function openLift(liftNum) {
     rightDoors[liftNum].classList.remove("right-door-close");
 }
 
-function closeLift(liftNum) {
+function closeLift(liftNum, destFloor) {
     leftDoors = document.querySelectorAll(".left-door");
     rightDoors = document.querySelectorAll(".right-door");
 
@@ -116,14 +134,15 @@ function closeLift(liftNum) {
 
     setTimeout(() => {
         lifts[liftNum].busy = false;
+        requests.removeProcessing(destFloor);
         dispatchLiftIdle();
     }, 2500);
 }
 
-function openCloseLift(liftNum) {
+function openCloseLift(liftNum, destFloor) {
     openLift(liftNum);
     setTimeout(() => {
-        closeLift(liftNum);
+        closeLift(liftNum, destFloor);
     }, 3000);
 }
 
@@ -134,7 +153,7 @@ function moveLift(lift, destFloor, index) {
     lifts[index].currentFloor = destFloor;
     
     setTimeout(() => {
-        openCloseLift(index);
+        openCloseLift(index, destFloor);
     }, 2000 * distance);
 }
 
@@ -194,8 +213,10 @@ function getFloorElement(floorNumber) {
 }
 
 function addRequest(destFloor) {
-    requests.add(destFloor);
-    dispatchRequestAdded();
+    if(!requests.find(destFloor)) {
+        requests.add(destFloor);
+        dispatchRequestAdded();
+    }
 }
 
 function addCallEventListeners(buttons) {
