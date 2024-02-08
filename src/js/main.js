@@ -256,8 +256,6 @@ function takeInputAndStartSimulation() {
 
     if(isNaN(numLifts) || numLifts <= 0 || isNaN(numFloors) || numFloors <= 0) {
         alert('Entered input is invalid, please check');
-        document.getElementById('num-lifts').value = '';
-        document.getElementById('num-floors').value = '';
         return;
     }
 
@@ -275,13 +273,17 @@ function takeInputAndStartSimulation() {
 
     var line = document.querySelector('.lift-container:last-child').style.left;
     var lineLength = parseInt(line.substring(0, line.length - 2));
+    var screenWidth = document.getElementsByTagName("body")[0].clientWidth;
 
     var floors = document.querySelectorAll('.floor');
     for(var i = 0; i < floors.length; ++i) {
-        floors[i].style.width = `${lineLength + 80}px`;
+        floors[i].style.width = lineLength + 80 > screenWidth ? `${lineLength + 80}px` : `${screenWidth}px`;
     }
 
-    removeFirstLastFloorButtons();
+    if(numFloors > 1) {
+        removeFirstLastFloorButtons();
+    }
+    
     callUpButtons = document.querySelectorAll(".call-lift-up-btn");
     addCallEventListeners(callUpButtons, 'U');
     callDownButtons = document.querySelectorAll(".call-lift-down-btn");
