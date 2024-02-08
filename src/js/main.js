@@ -273,6 +273,14 @@ function takeInputAndStartSimulation() {
         addLift();
     }
 
+    var line = document.querySelector('.lift-container:last-child').style.left;
+    var lineLength = parseInt(line.substring(0, line.length - 2));
+
+    var floors = document.querySelectorAll('.floor');
+    for(var i = 0; i < floors.length; ++i) {
+        floors[i].style.width = `${lineLength + 80}px`;
+    }
+
     removeFirstLastFloorButtons();
     callUpButtons = document.querySelectorAll(".call-lift-up-btn");
     addCallEventListeners(callUpButtons, 'U');

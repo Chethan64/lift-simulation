@@ -156,6 +156,7 @@ input::-webkit-inner-spin-button {
 
 .floor {
     border-bottom: 1px solid;
+    border-radius: 2px;
     height: 110px;
     gap: 1rem;
     display: flex;
