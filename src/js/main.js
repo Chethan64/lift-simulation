@@ -70,6 +70,8 @@ document.addEventListener("liftIdle", () => {
 const floorsContainer = document.querySelector(".floors");
 let floors = document.querySelectorAll(".floor");
 let callButtons = document.querySelectorAll(".call-lift-btn");
+let callUpButtons = document.querySelectorAll(".call-lift-up-btn");
+let callDownButtons = document.querySelectorAll(".call-lift-down-btn");
 let leftDoors = document.querySelectorAll(".left-door");
 let rightDoors = document.querySelectorAll(".right-door");
 var numFloors = 0;
@@ -88,20 +90,16 @@ function getLifts() {
 
 function getClosestEmptyLift(destFloor) {
     const lifts = getLifts();
+    const length = destFloor.length;
+    const destFloorNumber = destFloor.substring(0, length - 1);
 
     var closestLiftIndex = -1;
     var closeLiftDistance = floors.length + 1;
     var closestLift = {};
 
     for(var i = 0; i < lifts.length; ++i) {
-        if(lifts[i].currentFloor == destFloor) {
-            return { lift: lifts[i], index: i };
-        }
-    }
-
-    for(var i = 0; i < lifts.length; ++i) {
         if(!lifts[i].busy) {
-            var distance = Math.abs(destFloor - lifts[i].currentFloor);
+            var distance = Math.abs(destFloorNumber - lifts[i].currentFloor);
             if(distance < closeLiftDistance) {
                 closestLiftIndex = i;
                 closeLiftDistance = distance;
@@ -147,10 +145,12 @@ function openCloseLift(liftNum, destFloor) {
 }
 
 function moveLift(lift, destFloor, index) {
-    const distance = Math.abs(destFloor - lifts[index].currentFloor);
-    lift.style.transform = `translateY(${destFloor * 100 * -1}%)`;
+    const length = destFloor.length;
+    const destFloorNumber = destFloor.substring(0, length - 1);
+    const distance = Math.abs(destFloorNumber - lifts[index].currentFloor);
+    lift.style.transform = `translateY(${destFloorNumber * 100 * -1}%)`;
     lift.style.transition = `transform ${2000 * distance}ms ease-in-out`;
-    lifts[index].currentFloor = destFloor;
+    lifts[index].currentFloor = destFloorNumber;
     
     setTimeout(() => {
         openCloseLift(index, destFloor);
@@ -207,6 +207,9 @@ function getFloorElement(floorNumber) {
                 >
             </button>
         </div>
+        <div class="floor-number">
+            FLOOR ${floorNumber}
+        </div>
     `;
 
     return floorElement;
@@ -219,11 +222,11 @@ function addRequest(destFloor) {
     }
 }
 
-function addCallEventListeners(buttons) {
+function addCallEventListeners(buttons, direction) {
     for(let i = 0; i < buttons.length; ++i) {
         let destFloor = buttons[i].dataset.liftNum;
         buttons[i].addEventListener("click", () => {
-            addRequest(destFloor);
+            addRequest(destFloor + direction);
         });
     }
 }
@@ -239,33 +242,30 @@ function removeFirstLastFloorButtons() {
     }
 }
 
+function addResetHandler() {
+    const simulateButton = document.getElementById('start-simulation');
+    simulateButton.textContent = 'Reset';
+    simulateButton.addEventListener("click", () => {
+        location.reload();
+    });
+}
+
 function takeInputAndStartSimulation() {
     const numLifts = parseInt(document.getElementById('num-lifts').value);
     numFloors = parseInt(document.getElementById('num-floors').value);
 
-    const screenWidth = document.getElementsByTagName("body")[0].clientWidth;
-    const maxLifts = Math.floor((screenWidth - 100) / 120);
-
-    if(numLifts > maxLifts) {
-        alert('Number of lifts exceeds the lifts that can be rendered in the current screen size');
+    if(isNaN(numLifts) || numLifts <= 0 || isNaN(numFloors) || numFloors <= 0) {
+        alert('Entered input is invalid, please check');
+        document.getElementById('num-lifts').value = '';
+        document.getElementById('num-floors').value = '';
         return;
     }
 
-    if(numLifts > numFloors) {
-        alert('Number of lifts cannot be greater than the number of floors');
-        return;
-    }
-
-    if(numFloors > 10) {
-        alert('Number of floors cannot be greater than 10');
-        return;
-    }
-
-    document.getElementById('start-button').style.display = 'none';
+    addResetHandler();
     document.getElementById('num-lifts').setAttribute('disabled', 'disabled');
     document.getElementById('num-floors').setAttribute('disabled', 'disabled');
 
-    for(var floor = 1; floor < numFloors; ++floor) {
+    for(var floor = 0; floor < numFloors; ++floor) {
         floorsContainer.prepend(getFloorElement(floor));
     }
 
@@ -274,8 +274,10 @@ function takeInputAndStartSimulation() {
     }
 
     removeFirstLastFloorButtons();
-    callButtons = document.querySelectorAll(".call-lift-btn");
-    addCallEventListeners(callButtons);
+    callUpButtons = document.querySelectorAll(".call-lift-up-btn");
+    addCallEventListeners(callUpButtons, 'U');
+    callDownButtons = document.querySelectorAll(".call-lift-down-btn");
+    addCallEventListeners(callDownButtons, 'D');
 }
 
 function addEventListeners() {
